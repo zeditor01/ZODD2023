@@ -114,7 +114,7 @@ OSATRL2E TRLE LNCTL=MPC,READ=(0404),WRITE=(0405),DATAPATH=(0406),      X
 
 ADCD.Z25B.PROCLIB(TCPIP) has PROFILE DD Card as ```//PROFILE  DD DISP=SHR,DSN=ADCD.&SYSVER..TCPPARMS(PROF2) ```
 
-Look inside PROF2
+Look inside PROF2 - Edit it to point to zpdtdev2 instead of zpdtdev1
 
 ```
 include adcd.Z25B.tcpparms(zconnect) 
@@ -125,8 +125,16 @@ include adcd.Z25B.zcloud(inc)
 ; Used to access TCPIP applications from the zPDT Linux Base 
 ; workstation. 
 ; ------------------------------------------------------------- 
- include adcd.Z25B.tcpparms(zpdtdev1) 
+;include adcd.Z25B.tcpparms(zpdtdev2) 
+; ------------------------------------------------------------- 
+; zPDT External   to z/OS Connections (OPTIONAL) 
+; Support zPDT External   to z/OS Connections via zPDT workstation 
+; Edit zpdtdev2 and follow the instructions to change assigned 
+; IP address and default route statements 
+; ------------------------------------------------------------- 
+include adcd.Z25B.tcpparms(zpdtdev2)  
 ```
+
 
 And check the started task output in SDSF
 
@@ -135,7 +143,7 @@ EZZ0162I HOST NAME FOR TCPIP IS S0W1
 EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.TCPPARMS(ZCONNECT)'  
 EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.TCPPARMS(ZCXDVIPA)'  
 EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.ZCLOUD(INC)'         
-EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.TCPPARMS(ZPDTDEV1)'  
+EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.TCPPARMS(ZPDTDEV2)'  
 EZZ0300I OPENED PROFILE FILE DD:PROFILE                      
 EZZ0309I PROFILE PROCESSING BEGINNING FOR DD:PROFILE         
 ```
@@ -155,8 +163,108 @@ Setup the DVIPA for ZCX ( for later on ). Edit adcd.Z25B.tcpparms(zcxdvipa)
 ```
 
 
-Update ADCD.Z25A.TCPPARMS(ZPDTDEV1) to access z/OS and Linux via a tunnel:
+Update ADCD.Z25A.TCPPARMS(ZPDTDEV2) to access z/OS and Linux via a tunnel:
 - The IP address used to access z/OS from Linux (via tunnel) is 10.1.2.1
 - The IP address used to access Linux from z/OS (via tunnel) is 10.1.2.2
 - The IP address used by z/OS is 192.168.1.191
+
+```
+; 
+  DEVICE PORTA MPCIPA 
+  LINK OSDL IPAQENET ADM1ETP 
+  LINK ETH1 IPAQENET PORTA 
+; ------------------------------------------------------------------- 
+; Device to support zPDT External   to z/OS Connections 
+; ------------------------------------------------------------------- 
+; 
+  DEVICE PORTB    MPCIPA 
+  LINK ETH2 IPAQENET  PORTB 
+;-------------------------------------------------------------------- 
+; Home   to support zPDT External   to z/OS Connections 
+; ------------------------------------------------------------------- 
+; 
+  HOME 10.1.2.2       ETH1 
+  HOME 192.168.1.191  ETH2 
+; ------------------------------------------------------------------- 
+; Routes to support zPDT External   to z/OS Connections 
+; ------------------------------------------------------------------- 
+; 
+  BEGINRoutes 
+  ; Destination        SubnetMask    FirstHop       LinkName    Size 
+  ROUTE 10.1.2.0       255.255.255.0    =            ETH1   MTU 1500 
+  ROUTE 192.168.1.0    255.255.255.0    =            ETH2   MTU 1500 
+  ; Destination                      First Hop      LinkName    Size 
+  ROUTE DEFAULT                      192.168.1.1     ETH2   MTU 1500 
+  ENDRoutes 
+; ------------------------------------------------------------------- 
+; Start  to support zPDT External   to z/OS Connections 
+; ------------------------------------------------------------------- 
+; 
+ START ADM1ETP 
+ START PORTA 
+ START PORTB 
+
+```
+
+
+Edit the Resolver file : ADCD.Z25B.TCPPARMS(GBLRESOL) 
+
+```
+  DEFAULTTCPIPDATA('ADCD.Z25B.TCPPARMS(GBLTDATA)') 
+  GLOBALTCPIPDATA('ADCD.Z25B.TCPPARMS(GBLTDATA)') 
+; 
+# ----------------------------------------------------------------- 
+# Default zPDT Linux Base to z/OS Tunnel (Stand-Alone) 
+# ----------------------------------------------------------------- 
+; 
+; GLOBALIPNODES('ADCD.Z25B.TCPPARMS(ZPDTIPN1)') 
+# ----------------------------------------------------------------- 
+# External connection VIA zPDT Linux Base to z/OS Tunnel using NAT 
+# ----------------------------------------------------------------- 
+; 
+  GLOBALIPNODES('ADCD.Z25B.TCPPARMS(ZPDTIPN2)') 
+; 
+# ----------------------------------------------------------------- 
+# Default zPDT Linux Base to z/OS Tunnel (Stand-Alone) 
+# ----------------------------------------------------------------- 
+; 
+# DEFAULTIPNODES('ADCD.Z25B.TCPPARMS(ZPDTIPN1)') 
+# ----------------------------------------------------------------- 
+# External connection VIA zPDT Linux Base to z/OS Tunnel using NAT 
+# ----------------------------------------------------------------- 
+; 
+  DEFAULTIPNODES('ADCD.Z25B.TCPPARMS(ZPDTIPN2)') 
+; 
+  COMMONSEARCH 
+  CACHE 
+  CACHESIZE(200M) 
+  MAXTTL(2147483647) 
+  UNRESPONSIVETHRESHOLD(25) 
+
+```
+
+Edit ADCD.Z25B.TCPPARMS(ZPDTIPN2)
+
+```
+ 10.1.2.1        RHEL                             
+ 192.168.1.191   S0W1.DAL-EBIS.IHOST.COM S0W1 
+ 127.0.0.1       LOCALHOST 
+
+```
+
+Edit ADCD.Z25B.TCPPARMS(GBLTDATA)
+
+```
+TCPIPJOBNAME TCPIP 
+
+S0W1:   HOSTNAME   S0W1 
+
+DOMAINORIGIN  DAL-EBIS.IHOST.COM 
+
+DATASETPREFIX TCPIP 
+
+NSINTERADDR 8.8.8.8 
+
+RESOLVERTIMEOUT 30 
+```
 
