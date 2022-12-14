@@ -270,3 +270,12 @@ NSINTERADDR 8.8.8.8
 RESOLVERTIMEOUT 30 
 ```
 
+### Re-IPL and Test 
+
+Tests
+* 3270 Emulator - connects. But large 3270 map is lost
+* ssh - fine
+* ftp - connection refused 
+
+
+
