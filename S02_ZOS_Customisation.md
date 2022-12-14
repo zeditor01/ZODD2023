@@ -277,4 +277,133 @@ SMS
 /*
 ```
 
+## ACS Routines
+
+### ACS Step 1 - Usercats
+
+Think ahead of Aliases the I want to use for product installs
+
+* DVM (Data Virtualisation Manager)
+* CDCI (Classic CDC for IMS)
+* CDCV (Classic CDC for VSAM)
+* CDCD (CDC for Db2 z/OS)
+* QREP (Q Replication)
+* ZCX (ZCX)
+* ZCXPRV1, ZCXSTC1, ZCXADM1
+* WMLZ
+
+DEFINE ALIAS (NAME('DVM') RELATE('USERCAT.Z25B.USER'))
+
+DEFINE ALIAS (NAME('CDCI') RELATE('USERCAT.Z25B.USER'))
+DEFINE ALIAS (NAME('CDCV') RELATE('USERCAT.Z25B.USER'))
+DEFINE ALIAS (NAME('CDCD') RELATE('USERCAT.Z25B.USER'))
+
+DEFINE ALIAS (NAME('QREP') RELATE('USERCAT.Z25B.USER'))
+
+DEFINE ALIAS (NAME('ZCX') RELATE('USERCAT.Z25B.USER'))
+DEFINE ALIAS (NAME('ZCXPRV1') RELATE('USERCAT.Z25B.USER'))
+DEFINE ALIAS (NAME('ZCXSTC1') RELATE('USERCAT.Z25B.USER'))
+DEFINE ALIAS (NAME('ZCXADM1') RELATE('USERCAT.Z25B.USER')) 
+
+DEFINE ALIAS (NAME('WMLZ') RELATE('USERCAT.Z25B.USER'))
+
+
+### Edit ACS Routines
+
+Use ISMF to Check Active ACS ```SYS1.S0W1.DFSMS.CNTL```
+
+Edit DATACLAS. Move If &SIZE > 4052MB rule AFTER the ZCX rule. 
+
+```
+IF &DSN(1) = 'ZCX' THEN          
+  DO                             
+    IF &DSN(2) = 'VS' THEN       
+      DO                         
+            SET &DATACLAS='CXDC' 
+          END                    
+        END                      
+IF &DSN(2) = 'ZCX' THEN          
+          DO                     
+        IF &DSN(3) = 'FS' THEN   
+          DO                     
+            SET &DATACLAS='CXDC' 
+          END                    
+      END   
+```
+
+Edit STORCLAS.
+
+```
+	  FILTLIST DVM_HLQ          INCLUDE(DVM.**) 
+    
+    FILTLIST CDC_HLQ          INCLUDE(CDCI.**,    
+                                      CDCV.**,
+                                      CDCD.**,
+                               
+	  FILTLIST QREP_HLQ          INCLUDE(QREP.**)       
+ 
+ 	  FILTLIST WMLZ_HLQ          INCLUDE(WMLZ.**)     
+                                      
+    FILTLIST ZCX_HLQ          INCLUDE(ZCX.**,    
+                                  ZCXPRV1.**,
+                                  ZCXSTC1.**,
+                                  ZCXADM1.**) 
+								  
+								  
+
+WHEN (&HLQ = &ZCX_HLQ)           
+  DO                             
+    SET &STORCLAS = 'CXROOTSC'   
+    EXIT CODE(0)                 
+  END   
+  
+  WHEN (&HLQ = &DVM_HLQ)           
+  DO                             
+    SET &STORCLAS = 'SCEXTEAV'   
+    EXIT CODE(0)                 
+  END   
+  
+  WHEN (&HLQ = &CDC_HLQ)           
+  DO                             
+    SET &STORCLAS = 'SCEXTEAV'    
+    EXIT CODE(0)                 
+  END   
+  
+  WHEN (&HLQ = &QREP_HLQ)           
+  DO                             
+    SET &STORCLAS = 'SCEXTEAV'    
+    EXIT CODE(0)                 
+  END   
+  
+  WHEN (&HLQ = &WMLZ_HLQ)           
+  DO                             
+    SET &STORCLAS = 'SCEXTEAV'   
+    EXIT CODE(0)                 
+  END   
+```
+
+Edit STORGRP
+
+```
+WRITE '&DSN = ' &DSN
+WRITE '&STORCLAS = ' &STORCLAS
+WRITE '&DATACLAS = ' &DATACLAS
+WRITE '&DSTYPE = ' &DSTYPE
+
+  WHEN (&STORCLAS= 'CXROOTSC') 
+  DO                         
+    SET &STORGRP = 'CXROOTSG'
+    EXIT CODE(0)             
+  END   
+```
+
+Activate SMS 
+
+* ISMF Translate Each of the 3 members .... CDS = 'SYS1.S0W1.DFSMS.SCDS'  ; Source = SYS1.S0W1.DFSMS.CNTL  ; Member = 1,2,3
+* ISMF Validate ...
+* ISMF Activate ...'SYS1.S0W1.DFSMS.SCDS'
+
+OK ... Datasets for all proposed installations should go to the correct volumes 
+
+
 
