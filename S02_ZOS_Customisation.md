@@ -69,4 +69,78 @@ STPZONE  NO
 ```
 
 
-## 
+## Startup and Shutdown Automation
+
+Edit ```FEU.Z25B.PARMLIB(VTAMALL)```
+
+```
+COMMANDPREFIX=NONE   /* THIS IS THE DEFAULT VALUE */ 
+/*--------------------------------------------------------------------*
+/*--------------------------------------------------------------------*
+PAUSE 10      /* WAIT FOR SYS TO GET UP FIRST  */ 
+S RRS,SUB=MSTR,GNAME=&SYSNAME 
+S TSO         /* TIME SHARING OPTION */ 
+S SDSF 
+S EZAZSSI,P=S0W1 
+PAUSE 10      /* WAIT FOR SYS TO GET UP FIRST  */ 
+S TCPIP 
+PAUSE 5 
+S TN3270 
+PAUSE 5 
+/*S INETD */ 
+-DBCG START DB2 
+PAUSE 10 
+S HTTPD1 
+S NFSS 
+S CSF 
+S HZSPROC 
+PAUSE 5 
+S SSHD 
+PAUSE 5 
+S CICSTS56 
+PAUSE 10 
+S IMS15RL1 
+PAUSE 3 
+S IMS15CR1 
+PAUSE 10 
+%CSQ9 START QMGR 
+PAUSE 30 
+S IMSWARM 
+%CSQ9 START CHINIT 
+PAUSE 10 
+S ASCH,SUB=MSTR 
+PAUSE 5 
+S JMON 
+PAUSE 3 
+S RSED 
+PAUSE 3 
+S CFZCIM 
+PAUSE 10      /* WAIT FOR SYS TO GET UP FIRST  */ 
+S BLZBFA 
+PAUSE 10 
+S BLZISPFD 
+PAUSE 10 
+S BUZAGNT 
+/* S IZUANG1 */ 
+/* S IZUSVR1 */ 
+S ZOSCSRV 
+D T                          /* DISPLAY ENDING TIME 
+* COMMENT LINES MAY ALSO START WITH A SINGLE ASTERISK. 
+* REMEMBER - BLANK LINES ARE A BIG NO-NO. 
+```
+
+Add
+```
+S FTPD
+S INETD
+```
+
+
+
+Edit ```FEU.Z25B.PARMLIB(SHUTALL)```
+
+Add
+```
+P FTPD
+P INETD
+```
