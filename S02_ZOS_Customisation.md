@@ -135,6 +135,10 @@ S INETD
 
 Come back later for zOSMF. (although somehow it is autostarting. Must be a concatenation replacement)
 
+### Startup Resolution
+ADCD.Z25B.PARMLIB(COMMNDDB) issues a S VTAMDB which is located in SYS1.PARMLIB
+
+
 Edit ```FEU.Z25B.PARMLIB(SHUTALL)```
 
 Add
