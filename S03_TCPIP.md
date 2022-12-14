@@ -323,6 +323,28 @@ Digital certificate information for CERTAUTH:
 ***                                                        
 ```
 
+and TSO 6
+
+```
+RACDCERT LISTRING(IZUKeyring.IZUDFLT) ID(IZUSVR)
+```
+
+Yields
+
+```
+Digital ring information for user IZUSVR:                               
+                                                                        
+  Ring:                                                                 
+       >IZUKeyring.IZUDFLT<                                             
+  Certificate Label Name             Cert Owner     USAGE      DEFAULT  
+  --------------------------------   ------------   --------   -------  
+  JES2CA_EDS                         CERTAUTH       CERTAUTH     NO     
+  DefaultzOSMFCert.IZUDFLT           ID(IZUSVR)     PERSONAL     YES    
+  zOSMFCA                            CERTAUTH       CERTAUTH     NO     
+                                                                        
+***                                                                     
+```
+
 
 ## Test z/OSMF
 
@@ -332,7 +354,7 @@ Not secure because certificate not valid
 
 ![zosmfcert](images/zosmfcert.JPG)
 
-
+Worry about that another time.
 
 
 
