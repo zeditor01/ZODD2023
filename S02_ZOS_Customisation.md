@@ -182,6 +182,14 @@ Create a Mod 27
 alcckd /home/ibmsys1/Z25B001/WORK01 -d3390-27
 ```
 
+
+Edit ADCD.Z24C.PARMLIB(VATLSTDB)
+Edit ADCD.Z24C.PARMLIB(VATLST00)
+
+
+WORK*,0,0,3390   ,Y
+
+
 ## EXTEAV devices
 
 Create Six Mod 27s
@@ -218,5 +226,57 @@ device 0AAA 3390 3390 /home/ibmsys1/Z25B001/B5ZCX1
 device 0600 3390 3390 /home/ibmsys1/Z25B001/WORK01
 ```
 
+
+## Verify devmap
+
+chmod 777 *
+
+awsckmap  devmapsydney.txt 
+
+
+## Initialise Volumes and Convert to SMS
+
+IPL with volumes in devmap.
+
+Initialise voumes, one by one
+```
+//ICKDSF01 JOB (FB3),'INIT 3380 DASD',CLASS=A,MSGCLASS=H,
+// NOTIFY=&SYSUID,MSGLEVEL=(1,1)
+//STEP01 EXEC PGM=ICKDSF,REGION=0M
+//SYSPRINT DD SYSOUT=*
+//SYSIN DD *
+INIT -
+MAP /* MAP DEFECTS */ -
+UNIT(****) /* ADDRESS */ -
+NOCHECK -
+CONTINUE -
+NOVERIFY /* DO NOT CHECK VOLID */ -
+VTOC(9,0,200) /* 200 TRK VTOC */ -
+INDEX(0,1,44) /* 45 TRK INDEX */ -
+OWNERID('IBMUSER') -
+VOLID(******) /* NEW VOLID */
+/*
+```
+
+Reply to Message ```R NN,U```
+
+Vary unit online with ```VARY AB2,ONLINE```
+
+If necessary, add volume to SMS storagegroup, activate new SMS dataset
+
+Convert to SMS
+
+```
+//ICKDSF01 JOB (FB3),'SMS CONVERT',CLASS=A,MSGCLASS=H,
+// NOTIFY=&SYSUID,MSGLEVEL=(1,1)
+//STEP01 EXEC PGM=ADRDSSU,REGION=0M
+//SYSPRINT DD SYSOUT=*
+//INVOL1 DD VOL=SER=USER0A,UNIT=3390,DISP=SHR
+//SYSIN DD *
+CONVERTV -
+DDNAME(INVOL1) -
+SMS
+/*
+```
 
 
