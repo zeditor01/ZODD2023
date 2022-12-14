@@ -278,4 +278,14 @@ Tests
 * ftp - connection refused. ( FTPD wasnt started )
 
 
+## Certificates
+
+Previously found expired certificates in zOSMF KEYRING
+
+Checkout ```ADCD.Z25B.PARMLIB(IZUPRM00)```
+
+contains ```KEYRING_NAME('IZUKeyring.IZUDFLT')```
+
+
+
 
