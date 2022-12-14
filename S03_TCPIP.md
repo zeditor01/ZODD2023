@@ -12,6 +12,8 @@ This time
 ![p52nic](images/p52nic.JPG)
 
 
+Probably need to switch 192.168.1.191 to 172.20.64.8 when I go to ZVA ?
+
 ## ZD&T Application in P52 Linux 
 
 User ibmsys1 invoked find_io command
