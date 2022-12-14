@@ -287,5 +287,52 @@ Checkout ```ADCD.Z25B.PARMLIB(IZUPRM00)```
 contains ```KEYRING_NAME('IZUKeyring.IZUDFLT')```
 
 
+TSO 6
+```
+RACDCERT CERTAUTH LIST(LABEL('zOSMFCA'))
+```
+
+Yields an in-date zOSMF Certificate
+```
+Digital certificate information for CERTAUTH:              
+                                                           
+  Label: zOSMFCA                                           
+  Certificate ID: 2QiJmZmDhZmjganW4tTGw8FA                 
+  Status: TRUST                                            
+  Start Date: 2022/05/17 15:00:00                          
+  End Date:   2050/10/30 14:59:59                          
+  Serial Number:                                           
+       >00<                                                
+  Issuer's Name:                                           
+       >CN=z/OSMF CertAuth for Security Domain.OU=IZUDFLT< 
+  Subject's Name:                                          
+       >CN=z/OSMF CertAuth for Security Domain.OU=IZUDFLT< 
+  Signing Algorithm: sha256RSA                             
+  Key Usage: CERTSIGN                                      
+  Key Type: RSA                                            
+  Key Size: 2048                                           
+  Private Key: YES                                         
+  Certificate Fingerprint (SHA256):                        
+       8C:E3:18:EC:9C:80:09:45:0D:7B:79:7E:87:6B:CE:7F:    
+       80:75:3B:34:CA:E6:F4:62:DA:1B:7F:36:FD:3E:C1:36     
+  Ring Associations:                                       
+    Ring Owner: IZUSVR                                     
+    Ring:                                                  
+       >IZUKeyring.IZUDFLT<                                
+                                                           
+***                                                        
+```
+
+
+## Test z/OSMF
+
+Open URL ```https://192.168.1.191:10443/zosmf```
+
+Not secure because certificate not valid
+
+![zosmfcert](images/zosmfcert.JPG)
+
+
+
 
 
