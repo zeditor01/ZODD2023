@@ -197,7 +197,7 @@ alcckd /home/ibmsys1/Z25B001/EAV006 -d3390-27
 
 ## ZCX Device
 
-Create a Mod 27
+Create a Mod 54
 
 ```
 alcckd /home/ibmsys1/Z25B001/B5ZCX1 -d3390-54
