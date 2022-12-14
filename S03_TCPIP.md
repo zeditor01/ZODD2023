@@ -273,9 +273,9 @@ RESOLVERTIMEOUT 30
 ### Re-IPL and Test 
 
 Tests
-* 3270 Emulator - connects. But large 3270 map is lost
+* 3270 Emulator - connects. ( ISPF Settings Option 0 to place cursor at top, and screen format as 3. Max )
 * ssh - fine
-* ftp - connection refused 
+* ftp - connection refused. ( FTPD wasnt started )
 
 
 
