@@ -10,7 +10,7 @@ Priority to make this work because of...
 Appear to be installed, based on ADCD Z25B Docco
 
 
-[ADCD_Z25B_Docco]([https://www.google.com](http://dtsc.dfw.ibm.com/MVSDS/%27HTTPD2.ADCD.GLOBAL.SHTML(A25BREAD)%27))
+ADCD_Z25B_Docco[http://dtsc.dfw.ibm.com/MVSDS/%27HTTPD2.ADCD.GLOBAL.SHTML(A25BREAD)%27)]
 
 
 
