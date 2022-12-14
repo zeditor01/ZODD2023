@@ -9,6 +9,8 @@ This time
 ## TCPIP High Level
 
 
+![p52nic](images/p52nic.JPG)
+
 
 ## ZD&T Application in P52 Linux 
 
