@@ -51,7 +51,7 @@ User ibmsys1 invoked find_io command
 
 ```
 
-devmap configuration is
+devmap configuration is defined to place the Tunnel NIC on Path A1, which will use addresses 10.1.2.x so that Linux is 10.1.2.1 and zOS is 10.1.2.2 
 
 ```
 [manager]  # tap define network adapter (OSA) for communication with Linux
@@ -67,8 +67,96 @@ device 405 osa osa
 device 406 osa osa  
 ```
 
+Repeat find_io
+
+```
+[ibmsys1@localhost Z25B001]$ find_io
+   
+ FIND_IO for "ibmsys1@localhost.localdomain" 
+                                                                                                
+         Interface         Current          MAC                IPv4              IPv6           
+ Path    Name              State            Address            Address           Address        
+------   ----------------  ---------------- -----------------  ----------------  -------------- 
+  F0     enp0s31f6         UP, RUNNING      e8:6a:64:5d:2e:8a  192.168.1.188     fe80::8124:21fd:e178:6d63%enp0s31f6  
+  F1     wlp0s20f3         DOWN             d6:a8:9b:eb:d2:e6  *                 *               
+. 
+  *      virbr0            UP, NOT-RUNNING  52:54:00:a4:96:d1  192.168.122.1     *               
+  *      virbr0-nic        DOWN             52:54:00:a4:96:d1  *                 *               
+. 
+  A0     tap0              DOWN             02:a0:a0:a0:a0:a0  *                 *               
+  A1     tap1              UP, RUNNING      16:e6:47:f7:e4:3c  10.1.2.1          fe80::14e6:47ff:fef7:e43c%tap1  
+  A2     tap2              DOWN             02:a2:a2:a2:a2:a2  *                 *               
+  A3     tap3              DOWN             02:a3:a3:a3:a3:a3  *                 *               
+  A4     tap4              DOWN             02:a4:a4:a4:a4:a4  *                 *               
+  A5     tap5              DOWN             02:a5:a5:a5:a5:a5  *                 *               
+  A6     tap6              DOWN             02:a6:a6:a6:a6:a6  *                 *               
+  A7     tap7              DOWN             02:a7:a7:a7:a7:a7  *                 *               
+```
 
 
+## Edit TCPIP in z/OS
+
+Review ADCD.Z25B.VTAMLST(OSATRL2) to see the port names (PORTA is the Tunnel, PORTB is the OSA)
+
+```
+OSATRL1 VBUILD TYPE=TRL 
+OSATRL1E TRLE LNCTL=MPC,READ=(0400),WRITE=(0401),DATAPATH=(0402),      X
+               PORTNAME=PORTA,                                         X
+               MPCLEVEL=QDIO 
+OSATRL2E TRLE LNCTL=MPC,READ=(0404),WRITE=(0405),DATAPATH=(0406),      X
+               PORTNAME=PORTB,                                         X
+               MPCLEVEL=QDIO 
+
+```
 
 
+### Check the TCPIP task in PROCLIB
+
+ADCD.Z25B.PROCLIB(TCPIP) has PROFILE DD Card as ```//PROFILE  DD DISP=SHR,DSN=ADCD.&SYSVER..TCPPARMS(PROF2) ```
+
+Look inside PROF2
+
+```
+include adcd.Z25B.tcpparms(zconnect) 
+include adcd.Z25B.tcpparms(zcxdvipa) 
+include adcd.Z25B.zcloud(inc) 
+; ------------------------------------------------------------- 
+; Support zPDT Linux Base to z/OS Tunnel (STAND ALONE) 
+; Used to access TCPIP applications from the zPDT Linux Base 
+; workstation. 
+; ------------------------------------------------------------- 
+ include adcd.Z25B.tcpparms(zpdtdev1) 
+```
+
+And check the started task output in SDSF
+
+```
+EZZ0162I HOST NAME FOR TCPIP IS S0W1                         
+EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.TCPPARMS(ZCONNECT)'  
+EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.TCPPARMS(ZCXDVIPA)'  
+EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.ZCLOUD(INC)'         
+EZZ0300I OPENED INCLUDE FILE 'ADCD.Z25B.TCPPARMS(ZPDTDEV1)'  
+EZZ0300I OPENED PROFILE FILE DD:PROFILE                      
+EZZ0309I PROFILE PROCESSING BEGINNING FOR DD:PROFILE         
+```
+Ignore adcd.Z25B.tcpparms(zconnect) until you want to run ZCEE
+
+Setup the DVIPA for ZCX ( for later on ). Edit adcd.Z25B.tcpparms(zcxdvipa) 
+
+```
+  VIPADYNAMIC 
+; ------------------------------------------------------------------ 
+;  Define VIPA Range ONLY for ZCX 
+; ------------------------------------------------------------------ 
+   VIPARANGE DEFINE 255.255.255.255 10.1.2.5       ZCX 
+; 
+  ENDVIPADYNAMIC 
+
+```
+
+
+Update ADCD.Z25A.TCPPARMS(ZPDTDEV1) to access z/OS and Linux via a tunnel:
+- The IP address used to access z/OS from Linux (via tunnel) is 10.1.2.1
+- The IP address used to access Linux from z/OS (via tunnel) is 10.1.2.2
+- The IP address used by z/OS is 192.168.1.191
 
