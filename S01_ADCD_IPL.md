@@ -199,6 +199,6 @@ Change PWD to SYS1
 
 warm IPL.
 
-Base system operational
+Use DBSPROCC to access DB2 ISPF Menus
 
 
