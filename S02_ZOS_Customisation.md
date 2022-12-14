@@ -402,4 +402,10 @@ Activate SMS
 OK ... Datasets for all proposed installations should go to the correct volumes 
 
 
+## JES2 Checkpoint Datasets
+
+Leave this for now. Refer to Evernote later on
+
+
+
 
