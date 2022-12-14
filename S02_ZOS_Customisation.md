@@ -135,7 +135,7 @@ S FTPD
 S INETD
 ```
 
-
+Come back later for zOSMF
 
 Edit ```FEU.Z25B.PARMLIB(SHUTALL)```
 
@@ -144,3 +144,79 @@ Add
 P FTPD
 P INETD
 ```
+
+
+## ISMF Planning
+
+Change ISMF Profile to provide Administrator View. ( m.2.0.0 )
+
+Storage Groups
+
+```
+CXROOTSG POOL
+SGAPPL   POOL
+SGARCH   POOL
+SGBASE   POOL
+SGCICS   POOL
+SGDB2    POOL
+SGEXTEAV POOL
+SGIMS    POOL
+SGMQS    POOL
+SGVIO    VIO 
+```
+
+CXROOTSG - will be used for ZCX ( which needs huge datasets - 20GB ) ```B5ZCX1```
+
+SGBASE - will be used for small shit ```B5USR1 USER01 USER02 ...```
+
+SGDB2 - for Db2 ```B5DBC2 DB2001 DB2002 ...```
+
+SGEXTEAV will be used for Installing Products and ZFS datasets ```EAV001 EAV002 ... EAV00F```
+
+
+## Esoteric Device
+
+Create a Mod 27
+
+```
+alcckd /home/ibmsys1/Z25B001/WORK01 -d3390-27
+```
+
+## EXTEAV devices
+
+Create Six Mod 27s
+
+```
+alcckd /home/ibmsys1/Z25B001/EAV001 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV002 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV003 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV004 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV005 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV006 -d3390-27
+```
+
+## ZCX Device
+
+Create a Mod 27
+
+```
+alcckd /home/ibmsys1/Z25B001/B5ZCX1 -d3390-54
+```
+
+## Update Devmap 
+
+```
+device 0AA1 3390 3390 /home/ibmsys1/Z25B001/EAV001
+device 0AA2 3390 3390 /home/ibmsys1/Z25B001/EAV002
+device 0AA3 3390 3390 /home/ibmsys1/Z25B001/EAV003
+device 0AA4 3390 3390 /home/ibmsys1/Z25B001/EAV004
+device 0AA5 3390 3390 /home/ibmsys1/Z25B001/EAV005
+device 0AA6 3390 3390 /home/ibmsys1/Z25B001/EAV006
+
+device 0AAA 3390 3390 /home/ibmsys1/Z25B001/B5ZCX1
+
+device 0600 3390 3390 /home/ibmsys1/Z25B001/WORK01
+```
+
+
+
