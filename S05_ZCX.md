@@ -10,12 +10,11 @@ Priority to make this work because of...
 Appear to be installed, based on ADCD Z25B Docco
 
 
-ADCD_Z25B_Docco[http://dtsc.dfw.ibm.com/MVSDS/%27HTTPD2.ADCD.GLOBAL.SHTML(A25BREAD)%27)]
+ADCD_Z25B_Docco [http://dtsc.dfw.ibm.com/MVSDS/%27HTTPD2.ADCD.GLOBAL.SHTML(A25BREAD)%27)]
 
+And the License is enabled in ```ADCD.Z25B.PARMLIB(IFAPRD00)```
 
-
-ADCD.Z25B.PARMLIB(IFAPRD00)
-
+```
 PRODUCT OWNER('IBM CORP')                
         NAME('Z/OS CHF')                 
         ID(5655-HZ1)                     
@@ -24,5 +23,9 @@ PRODUCT OWNER('IBM CORP')
         MOD(*)                           
         FEATURENAME('CONTAINERHOSTFND')  
         STATE(ENABLED)                   
-        
+```
+
+So we should be able to deploy a ZCX Instance and find out if it works. If it fails we may need to upgrade to zdt 14.0
+
+
         
