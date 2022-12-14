@@ -133,7 +133,7 @@ S FTPD
 S INETD
 ```
 
-Come back later for zOSMF
+Come back later for zOSMF. (although somehow it is autostarting. Must be a concatenation replacement)
 
 Edit ```FEU.Z25B.PARMLIB(SHUTALL)```
 
