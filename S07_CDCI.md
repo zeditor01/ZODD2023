@@ -111,10 +111,10 @@ PSI Deploy Screenshot 1 - New Deployment
 
 ![psideploy01](images/psideploy01.JPG)
 
-PSI Deploy Screenshot 2 - New Portable Software Instance
+PSI Deploy Screenshot 2 - Specify Properties New Portable Software Instance (Name = CDCI)
 
 ![psideploy02](images/psideploy02.JPG)
 
-PSI Deploy Screenshot 3 - New Portable Software Instance
+PSI Deploy Screenshot 3 - Choose New Portable Software Instance
 
 ![psideploy03](images/psideploy03.JPG)
