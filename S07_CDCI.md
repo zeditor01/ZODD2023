@@ -35,7 +35,61 @@ Server XML box.
 </SERVER> 
 ```
 
+Client XML
+```
+<CLIENT
+    downloadmethod="https"
+    downloadkeyring="javatruststore"
+       >
+</CLIENT>
+```
+
+Job Statement
+```
+//IBMUSERJ JOB  (NPA),'SMPE PSI JOB',CLASS=A,MSGCLASS=H,
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M    
+```
+
+
 ## Download
+
+Process
+1. Launch z/OSMF at ```https://192.168.1.191:10443/zosmf/```
+2. Open "Software Management"
+3. Select "Portable Software Instances"
+4. Actions - "Add - From Download Server"
+5. Step 1 : Name = CDCI ; Paste Server XML ; System = S0W1 ; UNIX Directory = /u/ibmuser/smpework/CDCI
+6. Step 2 : Paste in Client XML and Job Card
+7. Step 3 : Action - Submit Job 
+8. Step 4 : Complete the Download
+
+PSI Download Screenshot 1 - Download Step 1 
+
+![psidownload01](images/psidownload01.JPG)
+
+PSI Download Screenshot 2 - Download Step 2
+
+![psidownload02](images/psidownload02.JPG)
+
+PSI Download Screenshot 3 - Download Step 3
+
+![psidownload03](images/psidownload03.JPG)
+
+PSI Download Screenshot 4 - Observe from Browser in z/OSMF
+
+![psidownload04](images/psidownload04.JPG)
+
+PSI Download Screenshot 5 - Observe in SDSF
+
+![psidownload05](images/psidownload05.JPG)
+
+PSI Download Screenshot 6 - Observe ZFS filling up in USS
+
+![psidownload06](images/psidownload06.JPG)
+
+PSI Download Screenshot 6 - Download Step 4
+
+![psidownload07](images/psidownload07.JPG)
 
 
 ## Workflows
