@@ -2,6 +2,9 @@
 
 ## SMPE Server XML
 
+20221216
+
+```
 <SERVER                                                                 
   host="deliverycb-mul.dhe.ibm.com"                                     
   user="P355749c"                                                       
@@ -14,6 +17,7 @@
    >                                                                    
   </PACKAGE>                                                            
 </SERVER> 
+```
 
 ## Download
 
