@@ -63,13 +63,16 @@ Process
 7. Step 3 : Action - Submit Job 
 8. Step 4 : 
 
-PSI Download Screenshot 1
+PSI Download Screenshot 1 - Download Step 1 
+
 ![psidownload01](images/psidownload01.JPG)
 
-PSI Download Screenshot 2
+PSI Download Screenshot 2 - Download Step 2
+
 ![psidownload02](images/psidownload02.JPG)
 
-PSI Download Screenshot 3
+PSI Download Screenshot 3 - Download Step 3
+
 ![psidownload03](images/psidownload03.JPG)
 
 PSI Download Screenshot 4
