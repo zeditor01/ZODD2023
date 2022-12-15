@@ -416,8 +416,64 @@ OK ... Datasets for all proposed installations should go to the correct volumes
 
 ## JES2 Checkpoint Datasets
 
-Leave this for now. Refer to Evernote later on
+Allocate new JES2 Checkpoint Datasets
+
+```
+//IBMUSERJ JOB (NPA),'INIT 3390 VOL',CLASS=A,MSGCLASS=H,              
+//         NOTIFY=&SYSUID,MSGLEVEL=(1,1)                              
+//********************************************************************
+//*                                                                  *
+//* PURPOSE: CREATE JES2 CHECKPOINT DATA SETS                        *
+//*          ALLOCATED TO NON SMS VOLUME A4SYS1                      *
+//*                                                                  *
+//********************************************************************
+//ALLOCAT EXEC PGM=IEFBR14                                            
+//CHECK1  DD DSN=SYS1.Z25B.CKPT1,UNIT=SYSDA,                          
+//           VOLUME=SER=B5SYS1,DISP=(NEW,KEEP),                       
+//           SPACE=(TRK,300),DCB=(DSORG=PSU)                          
+//*                                                                   
+//CHECK2  DD DSN=SYS1.Z25B.CKPT2,UNIT=SYSDA,                          
+//           VOLUME=SER=B5SYS1,DISP=(NEW,KEEP),                       
+//           SPACE=(TRK,300),DCB=(DSORG=PSU)                                             
+```
 
 
+Define the new Backup Checkpoint Datasets to JES2
 
+```
+$T CKPTDEF,NEWCKPT1=(DSNAME=SYS1.Z25B.CKPT1,VOLSER=B5SYS1)
+
+$T CKPTDEF,NEWCKPT2=(DSNAME=SYS1.Z25B.CKPT2,VOLSER=B5SYS1)
+```
+
+Suppress Operator Verification during the reconfig dialog
+
+```
+$T CKPTDEF,OPVERIFY=NO
+```
+
+Edit ADCD.Z25B.PARMLIB(JES2PARM)
+... after CKPT1 & CKPT2 ... before DUPLEX=ON
+
+```
+/* start new checkpoint datasets */              
+NEWCKPT1=(DSNAME=SYS1.Z25B.CKPT1,VOLSER=B5SYS1)  
+NEWCKPT2=(DSNAME=SYS1.Z25B.CKPT2,VOLSER=B5SYS1)  
+OPVERIFY=NO                                      
+/* end new checkpoint datasets */                
+```
+
+Verify new JES2 Checkpoints
+
+```
+//IBMUSERJ JOB (NPA),'INIT 3390 VOL',CLASS=A,MSGCLASS=H,              
+//         NOTIFY=&SYSUID,MSGLEVEL=(1,1)                              
+//********************************************************************
+//*                                                                  *
+//* PURPOSE: VERIFY JES2 PARM                                        *
+//*                                                                  *
+//********************************************************************
+//JES2    EXEC JES2,REGION=0M                                         
+//IEFPROC.HASPLIST DD SYSOUT=*                                        
+```
 
