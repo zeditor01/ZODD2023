@@ -64,22 +64,22 @@ Process
 8. Step 4 : 
 
 PSI Download Screenshot 1
-![psidown01](images/psidown01.JPG)
+![psidownload01](images/psidownload01.JPG)
 
 PSI Download Screenshot 2
-![psidown02](images/psidown02.JPG)
+![psidownload02](images/psidownload02.JPG)
 
 PSI Download Screenshot 3
-![psidown03](images/psidown03.JPG)
+![psidownload03](images/psidownload03.JPG)
 
 PSI Download Screenshot 4
-![psidown04](images/psidown04.JPG)
+![psidownload04](images/psidownload04.JPG)
 
 PSI Download Screenshot 5
-![psidown05](images/psidown05.JPG)
+![psidownload05](images/psidownload05.JPG)
 
 PSI Download Screenshot 6
-![psidown06](images/psidown06.JPG)
+![psidownload06](images/psidownload06.JPG)
 
 
 
