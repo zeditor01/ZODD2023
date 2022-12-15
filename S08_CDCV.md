@@ -1,6 +1,6 @@
 # Classic CDC for VSAM
 
-## Serverl XML
+## Server XML
 
 20221216
 ```
