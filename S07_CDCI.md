@@ -61,7 +61,7 @@ Process
 5. Step 1 : Name = CDCI ; Paste Server XML ; System = S0W1 ; UNIX Directory = /u/ibmuser/smpework/CDCI
 6. Step 2 : Paste in Client XML and Job Card
 7. Step 3 : Action - Submit Job 
-8. Step 4 : 
+8. Step 4 : Complete the Download
 
 PSI Download Screenshot 1 - Download Step 1 
 
@@ -75,15 +75,21 @@ PSI Download Screenshot 3 - Download Step 3
 
 ![psidownload03](images/psidownload03.JPG)
 
-PSI Download Screenshot 4
+PSI Download Screenshot 4 - Observe from Browser in z/OSMF
+
 ![psidownload04](images/psidownload04.JPG)
 
-PSI Download Screenshot 5
+PSI Download Screenshot 5 - Observe in SDSF
+
 ![psidownload05](images/psidownload05.JPG)
 
-PSI Download Screenshot 6
+PSI Download Screenshot 6 - Observe ZFS filling up in USS
+
 ![psidownload06](images/psidownload06.JPG)
 
+PSI Download Screenshot 6 - Download Step 4
+
+![psidownload07](images/psidownload07.JPG)
 
 
 ## Workflows
