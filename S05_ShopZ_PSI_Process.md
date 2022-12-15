@@ -67,3 +67,28 @@ IBMUSER.CNTL(CRTZFS01)
 
 ## Larger Downloads over Six 3390s
 
+Create a ZFS spanning a pack of six 3390-009 volumes
+
+```
+//DEFINE   EXEC   PGM=IDCAMS                      
+//SYSPRINT DD     SYSOUT=H                        
+//SYSUDUMP DD     SYSOUT=H                        
+//AMSDUMP  DD     SYSOUT=H                        
+//SYSIN    DD     *                               
+     DELETE 'SQLDI.ZFS'                            
+     DEFINE CLUSTER (NAME(SQLDI.ZFS) -             
+            VOLUMES(EAV00A EAV00B EAV00C -        
+                    EAV00D EAV00E EAV00F) -       
+            DATACLASS(DCEXTEAV) -                 
+            LINEAR CYL(3336 3336) SHAREOPTIONS(3))
+/*                                                
+//FORMAT   EXEC   PGM=IOEAGFMT,REGION=0M,         
+// PARM=('-aggregate SQLDI.ZFS -compat')           
+//SYSPRINT DD     SYSOUT=H                        
+//STDOUT   DD     SYSOUT=H                        
+//STDERR   DD     SYSOUT=H                        
+//SYSUDUMP DD     SYSOUT=H                        
+//CEEDUMP  DD     SYSOUT=H                        
+//*
+
+```
