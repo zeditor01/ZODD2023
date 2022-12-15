@@ -94,3 +94,24 @@ PSI Download Screenshot 6 - Download Step 4
 
 ## Workflows
 
+Deployment Process
+1. Launch z/OSMF at ```https://192.168.1.191:10443/zosmf/```
+2. Open "Software Management"
+3. Open "Deployments"
+4. Select "New" and "Portable Software Instance"
+5. Select "Portable Software Instances"
+6. Select "CDCI" or whicher PSI you want to deploye
+7. Step 1 : Name = CDCI ; Paste Server XML ; System = S0W1 ; UNIX Directory = /u/ibmuser/smpework/CDCI
+8. Step 2 : Paste in Client XML and Job Card
+9. Step 3 : Action - Submit Job 
+10. Step 4 : Complete the Download
+
+
+PSI Deploy Screenshot 1 - New Deployment
+
+![psideploy01](images/psideploy01.JPG)
+
+PSI Deploy Screenshot 1 - New Portable Software Instance
+
+![psideploy02](images/psideploy02.JPG)
+
