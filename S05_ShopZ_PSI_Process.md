@@ -2,7 +2,13 @@
 
 ## Disk Geometry
 
-3390 Disk Geometry[https://ibmmainframes.com/references/disk.html]
+3390 Disk Geometry [https://ibmmainframes.com/references/disk.html]
+
+3390-009 (8.5GB)
+* 10017 CYL (849,960 bytes/CYL)
+* 15 TRACKS per CYL (56,664 bytes/Track)
+
+2000 CYL = 1.6GB
 
 ## ZFS for smpework
 
