@@ -99,19 +99,42 @@ Deployment Process
 2. Open "Software Management"
 3. Open "Deployments"
 4. Select "New" and "Portable Software Instance"
-5. Select "Portable Software Instances"
+5. Specify Name of Deployment (CDCI)
 6. Select "CDCI" or whicher PSI you want to deploye
-7. Step 1 : Name = CDCI ; Paste Server XML ; System = S0W1 ; UNIX Directory = /u/ibmuser/smpework/CDCI
-8. Step 2 : Paste in Client XML and Job Card
-9. Step 3 : Action - Submit Job 
-10. Step 4 : Complete the Download
-
+7. Objective = New CSI on target System S0W1
+8. Optional - Check for missing SYSMODS
+9. Configure Deployment (Accept Source Model, HLQs, Storage Classes, ZFS Mount Points )
+10. Specifically - mount point for supplied MQ - allow deafult because we will use MQ9 from ADCD
+11. Define Job Settings (location of PDS dataset for Jobs)
+12. Submit Deployment Jobs ( Unzip ; Rename ; Update CSI
 
 PSI Deploy Screenshot 1 - New Deployment
 
 ![psideploy01](images/psideploy01.JPG)
 
-PSI Deploy Screenshot 1 - New Portable Software Instance
+PSI Deploy Screenshot 2 - Specify Properties New Portable Software Instance (Name = CDCI)
 
 ![psideploy02](images/psideploy02.JPG)
+
+PSI Deploy Screenshot 3 - Choose New Portable Software Instance
+
+![psideploy03](images/psideploy03.JPG)
+
+PSI Deploy Screenshot 4 - Configure Deployment
+
+![psideploy04](images/psideploy04.JPG)
+
+PSI Deploy Screenshot 5 - Modify HLQ & Storageclass
+
+![psideploy05](images/psideploy05.JPG)
+
+PSI Deploy Screenshot 6 - Check HLQ & Storageclass
+
+![psideploy06](images/psideploy06.JPG)
+
+PSI Deploy Screenshot 7 - Submit Deployment Jobs
+
+![psideploy07](images/psideploy07.JPG)
+
+
 
