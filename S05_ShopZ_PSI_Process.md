@@ -69,26 +69,63 @@ IBMUSER.CNTL(CRTZFS01)
 
 Create a ZFS spanning a pack of six 3390-009 volumes
 
+Create 6 Model 9s
 ```
-//DEFINE   EXEC   PGM=IDCAMS                      
-//SYSPRINT DD     SYSOUT=H                        
-//SYSUDUMP DD     SYSOUT=H                        
-//AMSDUMP  DD     SYSOUT=H                        
-//SYSIN    DD     *                               
-     DELETE 'SQLDI.ZFS'                            
-     DEFINE CLUSTER (NAME(SQLDI.ZFS) -             
-            VOLUMES(EAV00A EAV00B EAV00C -        
-                    EAV00D EAV00E EAV00F) -       
-            DATACLASS(DCEXTEAV) -                 
-            LINEAR CYL(3336 3336) SHAREOPTIONS(3))
-/*                                                
-//FORMAT   EXEC   PGM=IOEAGFMT,REGION=0M,         
-// PARM=('-aggregate SQLDI.ZFS -compat')           
-//SYSPRINT DD     SYSOUT=H                        
-//STDOUT   DD     SYSOUT=H                        
-//STDERR   DD     SYSOUT=H                        
-//SYSUDUMP DD     SYSOUT=H                        
-//CEEDUMP  DD     SYSOUT=H                        
-//*
+alcckd /home/ibmsys1/Z25B001/EAV001 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV002 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV003 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV004 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV005 -d3390-27
+alcckd /home/ibmsys1/Z25B001/EAV006 -d3390-27
+```
 
+Add to devmap ; initvol ; convert to sms (?)
+
+Now run this job
+
+```
+//IBMUSERJ JOB  (NPA),'INIT 3380 DASD',CLASS=A,MSGCLASS=H,            
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                
+//********************************************************************
+//*                                                                  *
+//* PURPOSE: CREATE ZFS DATASET ON SGEXTEAV                          *
+//* and MOUNT IT AT /u/ibmuser/smpework                              *
+//*                                                                  *
+//********************************************************************
+//CREATE   EXEC PGM=IDCAMS,REGION=0M                                  
+//SYSPRINT DD SYSOUT=*                                                
+//SYSIN    DD *                                                       
+  DEFINE -                                                            
+       CLUSTER -                                                      
+         ( -                                                          
+             NAME(BIG6.ZFS) -                                         
+             VOLUMES(EAV00A EAV00B EAV00C -                           
+                     EAV00D EAV00E EAV00F) -                          
+             DATACLASS(DCEXTEAV) -                                    
+             LINEAR CYL(3336 3336) -                                  
+             SHAREOPTIONS(3) -                                        
+         )                                                            
+/*                                                                    
+//*                                                                   
+// SET ZFSDSN='BIG6.ZFS'                                              
+//FORMAT   EXEC PGM=IOEAGFMT,REGION=0M,COND=(0,LT),                   
+// PARM='-aggregate &ZFSDSN -compat'                                  
+//SYSPRINT DD SYSOUT=*                                                
+//STDOUT   DD SYSOUT=*                                                
+//STDERR   DD SYSOUT=*                                                
+//SYSUDUMP DD SYSOUT=*                                                
+//CEEDUMP  DD SYSOUT=*                                                
+//*                                                                   
+//*                                                                   
+//* MOUNT THE DATASET AT THE MOUNTPOINT DIRECTORY                     
+//*                                                                   
+//MOUNT    EXEC PGM=IKJEFT01,REGION=0M,DYNAMNBR=99,COND=(0,LT)        
+//SYSTSPRT  DD SYSOUT=*                                               
+//SYSTSIN   DD *                                                      
+  PROFILE MSGID WTPMSG                                                
+  MOUNT TYPE(ZFS) +                                                   
+    MODE(RDWR) +                                                      
+    MOUNTPOINT('/u/ibmuser/smpework') +                               
+    FILESYSTEM('BIG6.ZFS')                                            
+/*                                                                    
 ```
