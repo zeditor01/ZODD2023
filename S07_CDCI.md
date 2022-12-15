@@ -92,7 +92,7 @@ PSI Download Screenshot 6 - Download Step 4
 ![psidownload07](images/psidownload07.JPG)
 
 
-## Workflows
+## Deployment Workflows
 
 Deployment Process
 1. Launch z/OSMF at ```https://192.168.1.191:10443/zosmf/```
@@ -106,7 +106,12 @@ Deployment Process
 9. Configure Deployment (Accept Source Model, HLQs, Storage Classes, ZFS Mount Points )
 10. Specifically - mount point for supplied MQ - allow deafult because we will use MQ9 from ADCD
 11. Define Job Settings (location of PDS dataset for Jobs)
-12. Submit Deployment Jobs ( Unzip ; Rename ; Update CSI
+12. Submit Deployment Jobs ( Unzip ; Rename ; Update CSI )
+13. Perform Workflows (Your Order & PostDeploy )
+
+The Your Order workflow is nothing. Just override complete.
+
+The PostDeploy Workflow contains important steps. JFDI
 
 PSI Deploy Screenshot 1 - New Deployment
 
@@ -136,5 +141,8 @@ PSI Deploy Screenshot 7 - Submit Deployment Jobs
 
 ![psideploy07](images/psideploy07.JPG)
 
+PSI Deploy Screenshot 8 - Perform Workflows (YourOrder & PostDeploy)
+
+![psideploy07](images/psideploy08.JPG)
 
 
