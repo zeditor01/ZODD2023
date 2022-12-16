@@ -74,3 +74,8 @@ The PostDeploy Workflow contains important steps. JFDI
 See screenshots of the process in the S07_CDCV_INST notes.
 
 
+
+Mount Point
+/usr/lpp/db2repl_11_04
+QREP.OMVS.SASNROOT
+
