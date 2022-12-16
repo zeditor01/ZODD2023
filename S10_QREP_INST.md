@@ -34,6 +34,8 @@ Server XML box.
 </SERVER>    
 ```
 
+
+
 ## Download
 
 Process
@@ -79,3 +81,57 @@ Mount Point
 /usr/lpp/db2repl_11_04
 QREP.OMVS.SASNROOT
 
+Note that JOB00703 (IBMUSERJ) failed OC4.
+Execute ASNLKMSG EXEC to create symbolic links to the 18 message catalog files
+
+```
+//IBMUSERJ JOB  (NPA),'SMPE PSI JOB',CLASS=A,MSGCLASS=H,                JOB00703                           
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M                                                     
+//*                                                                                                        
+//*                                                                                                        
+IEFC653I SUBSTITUTION JCL - (NPA),'SMPE PSI JOB',CLASS=A,MSGCLASS=H,NOTIFY=IBMUSER,MSGLEVEL=(1,1),REGION=0M
+/*JOBPARM SYSAFF=S0W1                                                                                      
+//********************************************************************                                     
+//* JOB: HAAWB33N  (product-supplied job ASNISLKM in library SASNBASE)                                     
+//*                                                                                                        
+//* GDE: Product ServerPac INSTALLING YOUR ORDER                                                           
+//*                                                                                                        
+//* DOC: This job executes the ASNLKMSG EXEC to create                                                     
+//*      symbolic links from the NLSPATH to the eighteen                                                   
+//*      message catalog files for the Q and SQL Replication                                               
+//*      feature of IBM InfoSphere Data Replication for DB2 for z/OS                                       
+//*      V11.4.0.                                                                                          
+//*                                                                                                        
+//* NOTES:                                                                                                 
+//*                                                                                                        
+//*  1. Check and change, if required, the install directory.                                              
+//*                                                                                                        
+//*  2. Change the -NlsPath- string to a path name that                                                    
+//*     includes all components of the NLSPATH directory                                                   
+//*     name up to the %L component.  If the NLSPATH is                                                    
+//*     /usr/lib/nls/msg/%L/%N, the path name is                                                           
+//*     /usr/lib/nls/msg/.  Note that the replacement                                                      
+//*     string is case sensitive.  Ensure the -NlsPath- is                                                 
+//*     an absolute path name which begins and ends with a                                                 
+//*     slash (/).  If you do not specify -NlsPath-,                                                       
+//*     the job will create symbolic links from the default                                                
+//*     NLSPATH, /usr/lib/nls/msg/, to the message catalog                                                 
+//*     files.                                                                                             
+//*                                                                                                        
+//*  3. Ensure you execute this job from a userid that is UID=0 or                                         
+//*     is the owner of the NLSPATH directory -NlsPath- specified.                                         
+//*                                                                                                        
+//*  4. This job should end with RC=0.  If not, then check the                                             
+//*     output, consult the UNIX System Services Messages and                                              
+//*     Codes book to correct the problem, and resubmit this job.                                          
+//*                                                                                                        
+//* MRC: The maximum expected return code is 0.                                                            
+//*                                                                                                        
+//*******************************************************************                                      
+//REXX     EXEC  PGM=IKJEFT1A                                                                              
+//SYSEXEC  DD DSN=QREP.ASN.SASNBASE,                                                                       
+//            DISP=SHR                                                                                     
+//SYSTSPRT  DD SYSOUT=*                                                                                    
+//SYSTSIN  DD   *                                                                                          
+//                                                                                                         
+```
