@@ -81,6 +81,9 @@ Mount Point
 /usr/lpp/db2repl_11_04
 QREP.OMVS.SASNROOT
 
+
+## ERRORS
+
 Note that JOB00703 (IBMUSERJ) failed OC4.
 Execute ASNLKMSG EXEC to create symbolic links to the 18 message catalog files
 
