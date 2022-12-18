@@ -73,4 +73,14 @@ The PostDeploy Workflow contains important steps. JFDI
 
 See screenshots of the process in the S07_CDCV_INST notes.
 
+Mountpoints for WLMZ
+
+```
+/usr/lpp/IBM/aln/v2r4	WMLZ.OMVS.SALNROOT	
+
+/usr/lpp/IBM/izoda/anaconda	WMLZ.OMVS.SANBZFS	
+
+/usr/lpp/IBM/izoda/spark	WMLZ.OMVS.SAZKROOT	
+```
+
 
