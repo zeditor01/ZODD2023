@@ -83,4 +83,57 @@ Mountpoints for WLMZ
 /usr/lpp/IBM/izoda/spark	WMLZ.OMVS.SAZKROOT	
 ```
 
+Permenant Mounts specified in ```ADCD.Z25B.PARMLIB(BPXPRMDB)```
 
+```
+/* ----------------------------------------------------------------- */
+/*                                                                   */
+/* WMLZ V2.4                                                         */
+/*                                                                   */
+/* ----------------------------------------------------------------- */
+                                                                       
+MOUNT    FILESYSTEM('WMLZ.OMVS.SALNROOT')                              
+         TYPE(ZFS)                                                     
+         MODE(RDWR)                                                    
+         MOUNTPOINT('/usr/lpp/IBM/aln/v2r4')                           
+                                                                       
+MOUNT    FILESYSTEM('WMLZ.OMVS.SANBZFS')                               
+         TYPE(ZFS)                                                     
+         MODE(RDWR)                                                    
+         MOUNTPOINT('/usr/lpp/IBM/izoda/anaconda')                     
+                                                                       
+MOUNT    FILESYSTEM('WMLZ.OMVS.SAZKROOT')                              
+         TYPE(ZFS)                                                     
+         MODE(RDWR)                                                    
+         MOUNTPOINT('/usr/lpp/IBM/izoda/spark')                        
+                                                                       
+```
+
+Contents of ZFS filesystems
+
+```
+IBMUSER:/Z25B/usr/lpp/IBM/aln/v2r4: >ls
+IBM            bin            extra          iml-onnx       iml-utilities  node_modules   usr
+README         cics-scoring   iml-db2ads     iml-portal     iml-zostools   nodejs         wlp
+alnsamp        configuration  iml-library    iml-services   imlpython      sparkaas
+
+IBMUSER:/Z25B/usr/lpp/IBM/izoda/anaconda: >ls
+2017_ga_pkgs.txt       2019_q3_pkgs36.txt     2020_q4_pkgs_p2.txt    2021_q2_pkgsn.txt      README_PYTHON37.md     install-march-ptf
+2018_q1_pkgs.txt       2019_q3_r_links        2021_alivy_sec.txt     2021_q4_links          README_R.md            install_functions
+2018_q3_links          2019_q4_links          2021_alivy_sec2.txt    2021_q4_pkgsn.txt      apar_notes.txt         install_functions_r
+2018_q3_pkgs.txt       2019_q4_pkgs.txt       2021_alivy_sec2_links  2022_alivy_sec1.txt    bin                    lib
+2018_sec_links         2019_q4_pkgsn.txt      2021_alivy_sec3.txt    2022_alivy_sec1_links  boot_pkgs.txt          man
+2018_sec_pkgs.txt      2020_q1_pkgs_py.txt    2021_alivy_sec3_links  2022_alivy_sec2.txt    change-prefix          march_ptf_pkgs.txt
+2018_sec_pkgsn.txt     2020_q1_pkgs_r.txt     2021_alivy_sec_links   2022_alivy_sec2_links  conda-meta             pkgs
+2019_q1_links          2020_q1_py_links       2021_amaven_sec.txt    2022_alivy_sec3.txt    configure-anaconda     py37_pkgs.txt
+2019_q1_pe0_links      2020_q1_r_links        2021_amaven_sec_links  2022_alivy_sec3_links  configure-anaconda-r   r_pkgs.txt
+2019_q1_pkgs.txt       2020_q2_links          2021_q1_links          2022_alivy_sec4.txt    dsdbc                  reinstall
+2019_q1_pkgsn.txt      2020_q2_pkgs.txt       2021_q1_pkgs.txt       2022_alivy_sec4_links  envs                   share
+2019_q2_links          2020_q2_pkgsn.txt      2021_q2_p1_links       CHANGES.md             etc                    ssl
+2019_q2_pkgsn.txt      2020_q4_p1_links       2021_q2_p2_links       IBM                    ga_pkgs.txt            var
+2019_q3_links          2020_q4_p2_links       2021_q2_pkgs_p1.txt    README.md              include
+2019_q3_pkgs.txt       2020_q4_pkgs_p1.txt    2021_q2_pkgs_p2.txt    README_CONFIGURE.md    initial-install
+
+IBMUSER:/Z25B/usr/lpp/IBM/izoda/spark: >ls
+IBM       spark24x
+```
