@@ -49,6 +49,7 @@ CDCI.CAC.I1.USERCONF
 CDCI.CAC.I1.USERSAMP
 ```
 
+
 ### Possible Error (until ShopZ download is repaired).
 As of late 2022 the REXX modeules CACCUSX1 and CACCUSX2 are broken.
 Temporary solution is to copy the CACCUSX1,2,3,4 source modules 
@@ -62,9 +63,98 @@ Edit CDCI.CAC.I1.USERSAMP(CECCUSP2) to specify the parameters for this instance
 
 Available in /source/cdci path of this repository
 
+### Run Instance Setup Jobs
 
+Define Logstreams
 
+Optional - delete the line with STG_DATACLAS if you don't have a storage class
 
+CDCI.CAC.I1.USERSAMP(CECCDSLS)
+
+```
+//*********************************************
+//* ALLOCATE THE LOG STREAM FOR THE EVENT LOG *
+//*********************************************
+//ALLOCEV    EXEC  PGM=IXCMIAPU                
+//SYSPRINT DD SYSOUT=*                         
+//SYSOUT   DD SYSOUT=*                         
+//SYSIN    DD *                                
+   DATA TYPE(LOGR) REPORT(NO)                  
+   DEFINE LOGSTREAM NAME(CDCSRC.EVENTS)        
+          DASDONLY(YES)                        
+          MAXBUFSIZE(4096)                     
+          LS_SIZE(1024)                        
+          STG_SIZE(512)                        
+          RETPD(14) AUTODELETE(YES)            
+/*                                             
+
+//********************************************************************
+//* ALLOCATE THE LOG STREAM FOR THE DIAGNOSTIC LOG                   *
+//********************************************************************
+//ALLOCDG    EXEC  PGM=IXCMIAPU                                       
+//SYSPRINT DD SYSOUT=*                                                
+//SYSOUT   DD SYSOUT=*                                                
+//SYSIN    DD *                                                       
+   DATA TYPE(LOGR) REPORT(NO)                                         
+   DEFINE LOGSTREAM NAME(CDCSRC.DIAGLOG)                              
+          DASDONLY(YES)                                               
+          LS_SIZE(1024)                                               
+          STG_SIZE(512)                                               
+          RETPD(7) AUTODELETE(YES)                                    
+/*                                                                    
+```
+
+Define Classic Catalog ZFS
+
+CDCI.CAC.I1.USERSAMP(CECCRZCT)
+
+```
+//CACVSDEF EXEC PGM=IDCAMS,REGION=0M                                   
+//SYSPRINT  DD SYSOUT=&SOUT                                            
+//SYSIN     DD *                                                       
+ PARM GRAPHICS(CHAIN(TN))                                              
+                                                                       
+ /* ------------------------------------------------------------- */   
+ /*                                                               */   
+ /*   Ensure that the high level qualifier set which references   */   
+ /*   the VSAM LDS to be used for the zFS aggregate is the same   */   
+ /*   string specified as the value of the USRHLQ JCL symbolic    */   
+ /*   parameter.                                                  */   
+ /*                                                               */   
+ /* ------------------------------------------------------------- */   
+                                                                       
+ DELETE (CDCI.CAC.I1.ZFS) -                                            
+   PURGE CLUSTER                                                       
+                                                                       
+ SET MAXCC = 0                                                         
+                                                                       
+ DEFINE CLUSTER ( -                                                    
+   NAME(CDCI.CAC.I1.ZFS) -                                             
+   LINEAR -                                                            
+   MEGABYTES(150 128) -                                                
+   VOLUMES(*) -                                                        
+   SHAREOPTIONS(3 3)  -                                                
+   CISZ(4096))                                                         
+/*                                                                     
+//*                                                                    
+//* ------------------------------------------------------------------ 
+//*                                                                    
+//*    . Format the VSAM LDS as a zFS aggregate.                       
+//*                                                                    
+//*      Note that all parameters for the zFS formatting utility       
+//*      (IOEAGFMT) are Case Sensitive                                 
+//*                                                                    
+//* ------------------------------------------------------------------ 
+//*                                                                    
+//FORMAT EXEC PGM=IOEAGFMT,REGION=0M,                                  
+//    COND=(0,LT),                                                     
+//    PARM='-aggregate CDCI.CAC.I1.ZFS  -compat'                       
+//SYSPRINT  DD SYSOUT=&SOUT                                            
+//STDOUT    DD SYSOUT=&SOUT                                            
+//STDERR    DD SYSOUT=&SOUT                                            
+//CEEDUMP   DD SYSOUT=&SOUT                                            
+//*                                                                    
+```
 
 ## Task 2: Configure z/OS Environment
 
