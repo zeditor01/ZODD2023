@@ -395,6 +395,14 @@ CSQ9023E %CSQ9 CSQ9SCND 'DEFINE QL' ABNORMAL COMPLETION
 ******************************** BOTTOM OF DATA ********************************
 ```
 
+RDEFINE MQCONN CSQ9.BATCH UACC(NONE)
+
+PERMIT CSQ9.BATCH CLASS(MQCONN) ID(PUBLIC) ACCESS(READ)
+
+SETROPTS REFRESH ish
+
+
+
 ## Task 2: Configure z/OS Environment
 
 add CCDC.SCACLOAD to the APF Authorized list of libraries. Edit ```ADCD.Z25B.PARMLIB(PROGAD)```
