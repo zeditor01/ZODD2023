@@ -502,12 +502,12 @@ end
 EAVOFF
 ```
 /* REXX */
-cmd.1 = "v sms,volume(EAV00A),disable"
-cmd.2 = "v sms,volume(EAV00B),disable"
-cmd.3 = "v sms,volume(EAV00C),disable"
-cmd.4 = "v sms,volume(EAV00D),disable"
-cmd.5 = "v sms,volume(EAV00E),disable"
-cmd.6 = "v sms,volume(EAV00F),disable"
+cmd.1 = "v sms,volume(EAV00A),disable,new"
+cmd.2 = "v sms,volume(EAV00B),disable,new"
+cmd.3 = "v sms,volume(EAV00C),disable,new"
+cmd.4 = "v sms,volume(EAV00D),disable,new"
+cmd.5 = "v sms,volume(EAV00E),disable,new"
+cmd.6 = "v sms,volume(EAV00F),disable,new"
 cmd.0 = 6
 do i = 1 to cmd.0
   x = AXRCMD(cmd.i,var.,5)
