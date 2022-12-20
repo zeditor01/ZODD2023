@@ -161,7 +161,7 @@ Create USS directory where the Classic Catalog will be mounted
 mkdir /opt/IBM/isclassic113/catalog
 
 Temporary mount
-mount -f CCDC.I1.ZFS /opt/IBM/isclassic113/catalog
+mount -f CDCI.CAC.I1.ZFS /opt/IBM/isclassic113/catalog
 
 Permanent mount
 Edit ADCD.Z24B.PARMLIB(BPXPRMDB)
@@ -252,7 +252,52 @@ QUIT
 /*                                                                    
 ```
 
+Create the Classic Catalog 
+Edit & Run
+CDCI.CAC.I1.USERSAMP(CECCDCAT)
 
+```
+//* ------------------------------------------------------------------
+//* Reset the USS file system resident catalog files to an            
+//* empty state.                                                      
+//* ------------------------------------------------------------------
+//*                                                                   
+//RESETCTD  EXEC  PGM=IEBGENER,REGION=0M                              
+//SYSPRINT  DD SYSOUT=&SOUT                                           
+//SYSIN     DD DUMMY                                                  
+//SYSUT1    DD DUMMY,                                                 
+//             DCB=(RECFM=FBS,LRECL=1,BLKSIZE=5120)                   
+//SYSUT2    DD PATHDISP=(KEEP,KEEP),                                  
+//             PATHMODE=(SIRWXU,SIRWXG),                              
+//             PATHOPTS=(ORDWR,OCREAT,OTRUNC),                        
+//             PATH='/opt/IBM/isclassic113/catalog/caccat'            
+//*                                                                   
+//RESETCTX  EXEC  PGM=IEBGENER,REGION=0M                              
+//SYSPRINT  DD SYSOUT=&SOUT                                           
+//SYSIN     DD DUMMY                                                  
+//SYSUT1    DD DUMMY,                                                 
+//             DCB=(RECFM=FBS,LRECL=1,BLKSIZE=5120)                   
+//SYSUT2    DD PATHDISP=(KEEP,KEEP),                                  
+//             PATHMODE=(SIRWXU,SIRWXG),                              
+//             PATHOPTS=(ORDWR,OCREAT,OTRUNC),                        
+//             PATH='/opt/IBM/isclassic113/catalog/cacindx'           
+//*                                                                   
+//* ----------------------------------------------------------------- 
+//*                                                                   
+//* Initialize the catalog files                                      
+//*                                                                   
+//* ----------------------------------------------------------------- 
+//*                                                                   
+//INIT     EXEC PGM=CACCATUT,PARM='INIT',REGION=&RGN                  
+//STEPLIB  DD  DISP=SHR,DSN=&CAC..SCACLOAD                            
+//SYSOUT   DD  SYSOUT=&SOUT                                           
+//SYSPRINT DD  SYSOUT=&SOUT                                           
+//MSGCAT   DD  DISP=SHR,DSN=&CAC..SCACMSGS                            
+//CACCAT   DD  PATHDISP=(KEEP,KEEP),                                  
+//             PATH='/opt/IBM/isclassic113/catalog/caccat'            
+//CACINDX  DD  PATHDISP=(KEEP,KEEP),                                  
+//             PATH='/opt/IBM/isclassic113/catalog/cacindx'           
+```
 
 ## Task 2: Configure z/OS Environment
 
