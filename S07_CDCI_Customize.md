@@ -299,6 +299,102 @@ CDCI.CAC.I1.USERSAMP(CECCDCAT)
 //             PATH='/opt/IBM/isclassic113/catalog/cacindx'           
 ```
 
+Create Replication Mapping Datasets
+
+ EDIT & Run
+CDCI.CAC.I1.USERSAMP(CECCDSUB)
+
+```
+// EXPORT SYMLIST=(CPHLQ)             
+// SET CPHLQ='CDCI.CAC.I1.CDCSRC'     
+//*                                   
+//ALLOC001 EXEC PGM=IDCAMS            
+//SYSPRINT DD   SYSOUT=*              
+//SYSIN    DD   *,SYMBOLS=JCLONLY     
+ DELETE &CPHLQ..SUB PURGE             
+ IF LASTCC=8 THEN SET MAXCC=0         
+ /**/                                 
+ DELETE &CPHLQ..RM PURGE              
+ IF LASTCC=8 THEN SET MAXCC=0         
+ /**/                                 
+ DEFINE CLUSTER                  -    
+    (NAME(&CPHLQ..SUB)        -       
+     RECSZ(1024 2048)            -    
+     KEY(80 12)                  -    
+     CYL(2 1)                    -    
+     SPEED REUSE)                -    
+  DATA                           -    
+    (NAME(&CPHLQ..SUB.DATA)   -       
+     CISZ(8192)                  -    
+     FSPC(20 5))                 -    
+  INDEX                          -    
+    (NAME(&CPHLQ..SUB.INDEX)  -       
+     CISZ(6144))                      
+ /**/                                 
+ DEFINE CLUSTER                  -    
+    (NAME(&CPHLQ..RM)        -        
+     RECSZ(512 2432)             -    
+     KEY(20 12)                  -    
+     CYL(15 5)                   -    
+     SPEED REUSE)                -    
+   DATA                          -    
+     (NAME(&CPHLQ..RM.DATA)   -       
+      CISZ(8192)                 -    
+      FSPC(20 5))                -    
+   INDEX                         -    
+     (NAME(&CPHLQ..RM.INDEX)  -       
+      CISZ(2048))                     
+/*                                    
+```
+
+
+Create Replication Bookmark Queue (Optional)
+
+Edit & Run
+CDCI.CAC.I1.USERSAMP(CECPBKLQ)
+
+```
+//DEFINE EXEC PGM=CSQUTIL,PARM='CSQ9'                          
+//STEPLIB   DD DISP=SHR,DSN=CSQ911.SCSQANLE                    
+//          DD DISP=SHR,DSN=CSQ911.SCSQAUTH                    
+//SYSPRINT DD  SYSOUT=*                                        
+//SYSIN    DD  *                                               
+  COMMAND DDNAME(DEFQ)                                         
+/*                                                             
+//DEFQ DD *                                                    
+  DEFINE QL(CDCI.BOOKMARK) +                                   
+    DEFPSIST(YES) GET(ENABLED) INDXTYPE(MSGID) PUT(ENABLED) +  
+    DEFSOPT(SHARED) SHARE                                      
+/*                                                             
+//                                                             
+```
+
+Fails until you define the QM stuff to RACF
+```
+ SDSF OUTPUT DISPLAY CECPBKLQ JOB01248  DSID   103 LINE 0       COLUMNS 02- 161 
+ COMMAND INPUT ===>                                            SCROLL ===> PAGE 
+********************************* TOP OF DATA **********************************
+ CSQU000I CSQUTIL IBM MQ for z/OS V9.2.5                                        
+ CSQU001I CSQUTIL Queue Manager Utility - 2022-12-20 14:51:31                   
+  COMMAND DDNAME(DEFQ)                                                          
+ CSQU127I  Executing COMMAND using input from DEFQ data set                     
+ CSQU120I  Connecting to CSQ9                                                   
+ CSQU121I  Connected to queue manager CSQ9                                      
+ CSQU055I  Target queue manager is CSQ9                                         
+  DEFINE QL(CDCI.BOOKMARK) +                                                    
+    DEFPSIST(YES) GET(ENABLED) INDXTYPE(MSGID) PUT(ENABLED) +                   
+    DEFSOPT(SHARED) SHARE                                                       
+CSQN205I   COUNT=       3, RETURN=00000020, REASON=FFFFFFFF                     
+CSQ9016E %CSQ9 ' DEFINE' command request not authorized                         
+CSQ9023E %CSQ9 CSQ9SCND 'DEFINE QL' ABNORMAL COMPLETION                         
+ CSQU057I  1 commands read                                                      
+ CSQU058I  1 commands issued and responses received, 1 failed                   
+ CSQU143I  1 COMMAND statements attempted                                       
+ CSQU144I  1  statements executed successfully                                  
+ CSQU148I CSQUTIL Utility completed, return code=0                              
+******************************** BOTTOM OF DATA ********************************
+```
+
 ## Task 2: Configure z/OS Environment
 
 add CCDC.SCACLOAD to the APF Authorized list of libraries. Edit ```ADCD.Z25B.PARMLIB(PROGAD)```
