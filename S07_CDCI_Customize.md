@@ -60,9 +60,23 @@ Specify the Parameters to be used for the Instance
 
 Edit CDCI.CAC.I1.USERSAMP(CECCUSP2) to specify the parameters for this instance
 
+Available in /source/cdci path of this repository
+
+
+
 
 
 ## Task 2: Configure z/OS Environment
+
+add CCDC.SCACLOAD to the APF Authorized list of libraries. Edit ```ADCD.Z25B.PARMLIB(PROGAD)```
+
+```
+/**********************************************/                      
+/*  CDCI                                      */                      
+/**********************************************/                      
+APF ADD                                                               
+    DSNAME(CDCI.CAC.SCACLOAD)                           VOLUME(EAV004)
+```
 
 ## Task 3: Configure IMS Environment
 
