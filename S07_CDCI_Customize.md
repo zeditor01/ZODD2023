@@ -78,6 +78,11 @@ APF ADD
     DSNAME(CDCI.CAC.SCACLOAD)                           VOLUME(EAV004)
 ```
 
+TCPIP Ports
+
+Check Port 9087 and 5003 are available and open for connection to Classic CDC Started Task from client tools.
+
+
 ## Task 3: Configure IMS Environment
 
 
