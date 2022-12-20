@@ -156,6 +156,104 @@ CDCI.CAC.I1.USERSAMP(CECCRZCT)
 //*                                                                    
 ```
 
+Create USS directory where the Classic Catalog will be mounted
+
+mkdir /opt/IBM/isclassic113/catalog
+
+Temporary mount
+mount -f CCDC.I1.ZFS /opt/IBM/isclassic113/catalog
+
+Permanent mount
+Edit ADCD.Z24B.PARMLIB(BPXPRMDB)
+
+```
+/* ----------------------------------------------------------------- */
+/*                                                                   */
+/* Classic CDC for IMS                                               */
+/*                                                                   */
+/* ----------------------------------------------------------------- */
+                                                                       
+MOUNT    FILESYSTEM('CDCI.CAC.I1.ZFS')                                 
+         TYPE(ZFS)                                                     
+         MODE(RDWR)                                                    
+         MOUNTPOINT('/opt/IBM/isclassic113/catalog')                   
+                                                                       
+```
+
+
+Allocate the Configuration files & Import the default source configuration
+Edit & Run
+CCDC.I1.USERSAMP(CECCDCFG)
+
+```
+//*************************************************                   
+//* ALLOCATE CONFIGURATION FILES                  *                   
+//*************************************************                   
+//CFGALLOC     EXEC PGM=IEFBR14                                       
+//CACCFGD      DD  DSN=&CPHLQ..CACCFGD,                               
+//             UNIT=&DISKU,                                           
+//             STORCLAS=&STGCL,                                       
+//             MGMTCLAS=&MGTCL,                                       
+//             SPACE=(TRK,(20,10)),                                   
+//             DCB=(RECFM=FBS,LRECL=64,BLKSIZE=27968),                
+//             DISP=(NEW,CATLG,DELETE)                                
+//CACCFGX  DD  DSN=&CPHLQ..CACCFGX,                                   
+//             UNIT=&DISKU,                                           
+//             STORCLAS=&STGCL,                                       
+//             MGMTCLAS=&MGTCL,                                       
+//             SPACE=(TRK,(10,5)),                                    
+//             DCB=(RECFM=FBS,LRECL=64,BLKSIZE=27968),                
+//             DISP=(NEW,CATLG,DELETE)                                
+//*                                                                   
+//SYSOUT   DD  SYSOUT=&SOUT                                           
+//SYSPRINT DD  SYSOUT=&SOUT                                           
+//********************************************************************
+//* IMPORT SOURCE CONFIGURATION                                      *
+//********************************************************************
+//CFGINIT   EXEC PGM=CACCFGUT,REGION=&RGN                             
+//STEPLIB  DD  DISP=SHR,DSN=&CAC..SCACLOAD                            
+//MSGCAT   DD  DISP=SHR,DSN=&CAC..SCACMSGS                            
+//*                                                                   
+//* CONFIGURATION FILES TO POPULATE                                   
+//CACCFGD  DD DISP=SHR,DSN=&CPHLQ..CACCFGD                            
+//CACCFGX  DD DISP=SHR,DSN=&CPHLQ..CACCFGX                            
+//*                                                                   
+//* CONFIG DEFINITION TO IMPORT                                       
+//IMPORTCF DD DSN=&USRHLQ..USERCONF,DISP=SHR                          
+//SYSTERM  DD SYSOUT=&SOUT                                            
+//SYSPRINT DD SYSOUT=&SOUT                                            
+//SYSOUT   DD SYSOUT=&SOUT                                            
+//SYSIN    DD DUMMY                                                   
+//********************************************************************
+//* ALLOCATE SYSMDUMP FILE                                           *
+//********************************************************************
+//DELETDMP  EXEC PGM=IEFBR14                                          
+//DDUMP  DD  DSN=&CPHLQ..SYSMDUMP,                                    
+//             DISP=(MOD,DELETE,DELETE),                              
+//             UNIT=SYSALLDA,                                         
+//             VOL=(,,,3),                                            
+//             SPACE=(TRK,(2500,450)),                                
+//             DCB=(LRECL=4160,RECFM=FBS,                             
+//             DSORG=PS)                                              
+//ALLOCDMP  EXEC PGM=IEFBR14                                          
+//MDUMP     DD DSN=&CPHLQ..SYSMDUMP,                                  
+//             DISP=(NEW,CATLG,DELETE),                               
+//             UNIT=SYSALLDA,                                         
+//             VOL=(,,,3),                                            
+//             SPACE=(TRK,(2500,450)),                                
+//             DCB=(LRECL=4160,RECFM=FBS,                             
+//             DSORG=PS)                                              
+//     PEND                                                           
+//ALLOCATE EXEC ALLOCFG                                               
+//CFGINIT.SYSIN DD *                                                  
+IMPORT,CONFIG,FILENAME=DDN:IMPORTCF(CECCDXFG)                         
+REPORT                                                                
+QUIT                                                                  
+/*                                                                    
+```
+
+
+
 ## Task 2: Configure z/OS Environment
 
 add CCDC.SCACLOAD to the APF Authorized list of libraries. Edit ```ADCD.Z25B.PARMLIB(PROGAD)```
