@@ -477,3 +477,50 @@ Verify new JES2 Checkpoints
 //IEFPROC.HASPLIST DD SYSOUT=*                                        
 ```
 
+## System REXX to enable/disable allocation of new datasets on sms volumes
+
+SYS1.SAXREXEC
+
+EAVON
+```
+/* REXX */
+cmd.1 = "v sms,volume(EAV00A),enable"
+cmd.2 = "v sms,volume(EAV00B),enable"
+cmd.3 = "v sms,volume(EAV00C),enable"
+cmd.4 = "v sms,volume(EAV00D),enable"
+cmd.5 = "v sms,volume(EAV00E),enable"
+cmd.6 = "v sms,volume(EAV00F),enable"
+cmd.0 = 6
+do i = 1 to cmd.0
+  x = AXRCMD(cmd.i,var.,5)
+  do j = 1 to var.0
+      x = AXRWTO(var.j)
+  end
+end
+```
+
+EAVOFF
+```
+/* REXX */
+cmd.1 = "v sms,volume(EAV00A),disable,new"
+cmd.2 = "v sms,volume(EAV00B),disable,new"
+cmd.3 = "v sms,volume(EAV00C),disable,new"
+cmd.4 = "v sms,volume(EAV00D),disable,new"
+cmd.5 = "v sms,volume(EAV00E),disable,new"
+cmd.6 = "v sms,volume(EAV00F),disable,new"
+cmd.0 = 6
+do i = 1 to cmd.0
+  x = AXRCMD(cmd.i,var.,5)
+  do j = 1 to var.0
+      x = AXRWTO(var.j)
+  end
+end
+```
+
+F AXR,EAVONN
+
+F AXR, EAVOFF
+
+
+
+
