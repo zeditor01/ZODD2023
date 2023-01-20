@@ -13,3 +13,7 @@ Install ZDT 14.0 Emulator.
 modify password of ibmsys1
 ibmsys1 / l0nep1ne
 
+unzip the zvolumes to /home/ibmsys1/z25c 
+
+
+
