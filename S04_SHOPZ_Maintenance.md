@@ -148,4 +148,125 @@ Restart z/OSMF.
 
 
 
+# Alternative Download via PC
+
+This method exposes a bit more of the guts of the SMPE process.
+
+Process as follows
+
+1. Run the report and order the PTF as before
+2. Download to PC with download director
+3. Create SMPNTS directories in USS
+4. FTP in binary to USS DIrectories
+5. SMPE Receive into Global Zone
+6. SMPE Apply into Target Zone
+7. SMPE Accept into Distribution Zone
+
+## Download Artefacts
+
+```
+C:\Users\neale\DownloadDirector\U02432185_B7757811_PROD\GIMPAF.XML
+C:\Users\neale\DownloadDirector\U02432185_B7757811_PROD\GIMPAF.XSL
+C:\Users\neale\DownloadDirector\U02432185_B7757811_PROD\SMPHOLD\S0002.SHOPZ.S7757811.SMPHOLD.pax.Z
+C:\Users\neale\DownloadDirector\U02432185_B7757811_PROD\SMPPTFIN\S0001.SHOPZ.S7757811.SMPMCS.pax.Z
+```
+
+## Naming Standards
+
+Be aware:
+* The FROMNTS(xxx) parameter in the RECEIVE job must be the sub-sirectory of the USS path
+* And it must be the same as the 9 character prefix on the download
+
+so 
+/u/ibmuser/smpe/maint/U02432185 needs to be created
+
+## FTP Upload
+
+FTP
+binary
+put etc...
+
+## SMPE Receive 
+
+The JCL below is good...
+* FROMNTS specifies the USS directory underneath SMPNTS, which must match the U number
+* RECNTS specifies the CSI
+
+```
+//IBMUSERJ JOB  (NPA),'INIT 3380 DASD',CLASS=A,MSGCLASS=H, 
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M     
+//* APPLY PTFS RECEIVED FROM SHOPZ ORDER                   
+//*                                                        
+//* Db2 zOS V13 Global Zone DSND10.GLOBAL.CSI              
+//* Target zone DSND10T                                    
+//* PH51892 receive after upload to /u/ibmuser/smpe/maint  
+//* execute & check output                                 
+//*                                                        
+//RECNTS   EXEC PGM=GIMSMP,REGION=0M,                      
+//         PARM='CSI=DSND10.GLOBAL.CSI'                    
+//SMPOUT   DD SYSOUT=*                                     
+//SMPLOG   DD SYSOUT=*                                     
+//SMPNTS   DD PATH='/u/ibmuser/smpe/maint'                 
+//SMPJHOME DD PATH='/usr/lpp/java/J8.0_64/',PATHDISP=KEEP  
+//SYSUT1   DD UNIT=SYSDA,SPACE=(CYL,(50,20))               
+//SYSUT2   DD UNIT=SYSDA,SPACE=(3120,(380,760))            
+//SYSUT3   DD UNIT=SYSDA,SPACE=(3120,(380,760))            
+//SYSUT4   DD UNIT=SYSDA,SPACE=(3120,(380,760))            
+//*SMPHOLD  DD DISP=SHR,DSN=ADCDMST.HOLDDATA.TXT           
+//SYSPRINT DD SYSOUT=*                                     
+//SMPCNTL  DD *                                            
+ SET BDY(GLOBAL).                                          
+   RECEIVE FROMNTS(U02432185)                              
+ .                                                         
+/*                                                         
+```
+
+SMPE Queries
+* Option 3 and specify zone DSND10.GLOBAL.CSI 
+* Option1 1 - CSI Query
+* Zone Name = ( GLOBAL / DSNS10T / DSND10D )
+* Entry Type = Sysmod
+* Entry Name = UInnnnn ( specify the PTF, not the APAR )
+
+
+## SMPE Apply
+
+```
+//IBMUSERJ JOB  (NPA),'INIT 3380 DASD',CLASS=A,MSGCLASS=H, 
+//             NOTIFY=&SYSUID,MSGLEVEL=(1,1),REGION=0M     
+//* APPLY PTFS RECEIVED FROM SHOPZ ORDER                   
+//*                                                        
+//* Db2 zOS V13 Global Zone DSND10.GLOBAL.CSI              
+//* Target zone DSND10T                                    
+//* PH51892 receive after upload to /u/ibmuser/smpe/maint  
+//* execute & check output                                 
+//*                                                        
+//RECNTS   EXEC PGM=GIMSMP,REGION=0M,                      
+//         PARM='CSI=DSND10.GLOBAL.CSI'                    
+//SMPOUT   DD SYSOUT=*                                     
+//SMPLOG   DD SYSOUT=*                                     
+//SMPNTS   DD PATH='/u/ibmuser/smpe/maint'                 
+//SMPJHOME DD PATH='/usr/lpp/java/J8.0_64/',PATHDISP=KEEP  
+//SYSUT1   DD UNIT=SYSDA,SPACE=(CYL,(50,20))               
+//SYSUT2   DD UNIT=SYSDA,SPACE=(3120,(380,760))            
+//SYSUT3   DD UNIT=SYSDA,SPACE=(3120,(380,760))            
+//SYSUT4   DD UNIT=SYSDA,SPACE=(3120,(380,760))            
+//*SMPHOLD  DD DISP=SHR,DSN=ADCDMST.HOLDDATA.TXT           
+//SYSPRINT DD SYSOUT=*                                     
+//SMPCNTL  DD *                                            
+ SET BDY(DSND10T).                                         
+   APPLY SELECT(PH51892)                                   
+   BYPASS(HOLDSYS)                                         
+   GROUPEXTEND                                             
+ .                                                         
+/*                                                         
+```
+
+
+What a palava !!!
+
+
+
+
+
 
